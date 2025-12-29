@@ -123,29 +123,35 @@ class LogitsProcessor(CustomOp):
         lm_head,
         embedding_bias: Optional[torch.Tensor],
     ) -> Optional[torch.Tensor]:
+        # Only use FlashHead for single-token generation (batch_size=1)
         if hidden_states.shape[0] > 1:
             return self._get_logits_old(hidden_states, lm_head, embedding_bias)
 
         global FLASH_HEAD
         if FLASH_HEAD is None:
-            from embedl.models.vllm import _get_flash_head
-
-            FLASH_HEAD = _get_flash_head()
+            try:
+                from embedl.models.vllm import _get_flash_head
+                FLASH_HEAD = _get_flash_head()
+            except Exception as e:
+                print(f"[Embedl] Could not load FlashHead in subprocess: {e}")
+                FLASH_HEAD = False  # Mark as unavailable
 
         flash_head = FLASH_HEAD
-        if flash_head is None:
+        # If FlashHead is False (unavailable) or None, use standard path
+        if not flash_head:
             return self._get_logits_old(hidden_states, lm_head, embedding_bias)
 
-        # TODO Should set sampling to True/False and temperature depending on mode. Now never samples.
-        next_token_ids = flash_head.get_next_token(
-            hidden_states.unsqueeze(0),
-        )
-
-        # ⚠️ vLLM still expects a "logits" tensor here
-        # so we fake it minimally: a 2D tensor with one column
-        # containing just the chosen token id
-        # (Sampler must be modified to accept this form)
-        return next_token_ids
+        try:
+            # Use FlashHead to get next token directly
+            next_token_ids = flash_head.get_next_token(
+                hidden_states.unsqueeze(0),
+            )
+            
+            # Return token IDs directly - Sampler will handle this format
+            return next_token_ids
+        except Exception as e:
+            print(f"[Embedl] FlashHead inference failed: {e}, falling back to standard logits")
+            return self._get_logits_old(hidden_states, lm_head, embedding_bias)
 
     def _get_logits_old(
         self,

@@ -42,13 +42,22 @@ def _patch_vllm_module(target_path, replacement_module):
     sys.modules[target_path] = module
 
 
-_patch_vllm_module(
-    "vllm.v1.sample.sampler", "embedl.models.vllm.patching.sampler"
-)
-_patch_vllm_module(
-    "vllm.model_executor.layers.logits_processor",
-    "embedl.models.vllm.patching.logits_processor",
-)
+def patch_vllm():
+    """Patch vLLM modules with custom implementations for FlashHead."""
+    _patch_vllm_module(
+        "vllm.v1.sample.sampler", "embedl.models.vllm.patching.sampler"
+    )
+    _patch_vllm_module(
+        "vllm.model_executor.layers.logits_processor",
+        "embedl.models.vllm.patching.logits_processor",
+    )
+    # Note: We don't register a custom model class because FlashHead
+    # works by patching the logits_processor and sampler modules.
+    # The standard Llama/Gemma models will work with FlashHead.
+    print("[Embedl] vLLM patching complete")
+
+
+patch_vllm()
 
 
 def _get_flash_head() -> nn.Module:

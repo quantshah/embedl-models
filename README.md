@@ -35,12 +35,12 @@ is capable of yielding H200-level latency on consumer-grade GPUs (RTX Ada).
 The recommended way to use FlashHead is vLLM with the custom generation
 pipeline provided in this package.
 
-A simple chat interface can be launched with the default model as:
+A simple chat interface can be launched as follows that serves an OpenAI
+compatible server at http://localhost:8000/v1/completions:
 ```
-python3 -m embedl.models.vllm.demo 
+python -m embedl.models.vllm.cli serve embedl/Llama-3.2-1B-Instruct-FlashHead --max_model_len 2048 --trust-remote-code
+vllm chat
 ```
-
-Other models can be selected by specifying `--model embedl/<model>` with FlashHead.
 
 Please checkout the models and how to use them (with vLLM on NVIDIA GPUs) at
 [https://huggingface.co/embedl/](https://huggingface.co/embedl/)
