@@ -1,0 +1,787 @@
+class GraphModule(torch.nn.Module):
+    def forward(self, p_embeddings_cls_token: "f32[1, 1, 768]", p_embeddings_mask_token: "f32[1, 768]", p_embeddings_position_embeddings: "f32[1, 1370, 768]", p_embeddings_patch_embeddings_projection_weight: "f32[768, 3, 14, 14]", p_embeddings_patch_embeddings_projection_bias: "f32[768]", p_encoder_layer_0_norm1_weight: "f32[768]", p_encoder_layer_0_norm1_bias: "f32[768]", p_encoder_layer_0_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_0_attention_attention_query_bias: "f32[768]", p_encoder_layer_0_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_0_attention_attention_key_bias: "f32[768]", p_encoder_layer_0_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_0_attention_attention_value_bias: "f32[768]", p_encoder_layer_0_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_0_attention_output_dense_bias: "f32[768]", p_encoder_layer_0_layer_scale1_lambda1: "f32[768]", p_encoder_layer_0_norm2_weight: "f32[768]", p_encoder_layer_0_norm2_bias: "f32[768]", p_encoder_layer_0_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_0_mlp_fc1_bias: "f32[3072]", p_encoder_layer_0_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_0_mlp_fc2_bias: "f32[768]", p_encoder_layer_0_layer_scale2_lambda1: "f32[768]", p_encoder_layer_1_norm1_weight: "f32[768]", p_encoder_layer_1_norm1_bias: "f32[768]", p_encoder_layer_1_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_1_attention_attention_query_bias: "f32[768]", p_encoder_layer_1_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_1_attention_attention_key_bias: "f32[768]", p_encoder_layer_1_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_1_attention_attention_value_bias: "f32[768]", p_encoder_layer_1_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_1_attention_output_dense_bias: "f32[768]", p_encoder_layer_1_layer_scale1_lambda1: "f32[768]", p_encoder_layer_1_norm2_weight: "f32[768]", p_encoder_layer_1_norm2_bias: "f32[768]", p_encoder_layer_1_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_1_mlp_fc1_bias: "f32[3072]", p_encoder_layer_1_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_1_mlp_fc2_bias: "f32[768]", p_encoder_layer_1_layer_scale2_lambda1: "f32[768]", p_encoder_layer_2_norm1_weight: "f32[768]", p_encoder_layer_2_norm1_bias: "f32[768]", p_encoder_layer_2_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_2_attention_attention_query_bias: "f32[768]", p_encoder_layer_2_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_2_attention_attention_key_bias: "f32[768]", p_encoder_layer_2_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_2_attention_attention_value_bias: "f32[768]", p_encoder_layer_2_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_2_attention_output_dense_bias: "f32[768]", p_encoder_layer_2_layer_scale1_lambda1: "f32[768]", p_encoder_layer_2_norm2_weight: "f32[768]", p_encoder_layer_2_norm2_bias: "f32[768]", p_encoder_layer_2_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_2_mlp_fc1_bias: "f32[3072]", p_encoder_layer_2_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_2_mlp_fc2_bias: "f32[768]", p_encoder_layer_2_layer_scale2_lambda1: "f32[768]", p_encoder_layer_3_norm1_weight: "f32[768]", p_encoder_layer_3_norm1_bias: "f32[768]", p_encoder_layer_3_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_3_attention_attention_query_bias: "f32[768]", p_encoder_layer_3_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_3_attention_attention_key_bias: "f32[768]", p_encoder_layer_3_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_3_attention_attention_value_bias: "f32[768]", p_encoder_layer_3_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_3_attention_output_dense_bias: "f32[768]", p_encoder_layer_3_layer_scale1_lambda1: "f32[768]", p_encoder_layer_3_norm2_weight: "f32[768]", p_encoder_layer_3_norm2_bias: "f32[768]", p_encoder_layer_3_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_3_mlp_fc1_bias: "f32[3072]", p_encoder_layer_3_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_3_mlp_fc2_bias: "f32[768]", p_encoder_layer_3_layer_scale2_lambda1: "f32[768]", p_encoder_layer_4_norm1_weight: "f32[768]", p_encoder_layer_4_norm1_bias: "f32[768]", p_encoder_layer_4_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_4_attention_attention_query_bias: "f32[768]", p_encoder_layer_4_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_4_attention_attention_key_bias: "f32[768]", p_encoder_layer_4_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_4_attention_attention_value_bias: "f32[768]", p_encoder_layer_4_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_4_attention_output_dense_bias: "f32[768]", p_encoder_layer_4_layer_scale1_lambda1: "f32[768]", p_encoder_layer_4_norm2_weight: "f32[768]", p_encoder_layer_4_norm2_bias: "f32[768]", p_encoder_layer_4_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_4_mlp_fc1_bias: "f32[3072]", p_encoder_layer_4_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_4_mlp_fc2_bias: "f32[768]", p_encoder_layer_4_layer_scale2_lambda1: "f32[768]", p_encoder_layer_5_norm1_weight: "f32[768]", p_encoder_layer_5_norm1_bias: "f32[768]", p_encoder_layer_5_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_5_attention_attention_query_bias: "f32[768]", p_encoder_layer_5_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_5_attention_attention_key_bias: "f32[768]", p_encoder_layer_5_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_5_attention_attention_value_bias: "f32[768]", p_encoder_layer_5_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_5_attention_output_dense_bias: "f32[768]", p_encoder_layer_5_layer_scale1_lambda1: "f32[768]", p_encoder_layer_5_norm2_weight: "f32[768]", p_encoder_layer_5_norm2_bias: "f32[768]", p_encoder_layer_5_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_5_mlp_fc1_bias: "f32[3072]", p_encoder_layer_5_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_5_mlp_fc2_bias: "f32[768]", p_encoder_layer_5_layer_scale2_lambda1: "f32[768]", p_encoder_layer_6_norm1_weight: "f32[768]", p_encoder_layer_6_norm1_bias: "f32[768]", p_encoder_layer_6_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_6_attention_attention_query_bias: "f32[768]", p_encoder_layer_6_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_6_attention_attention_key_bias: "f32[768]", p_encoder_layer_6_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_6_attention_attention_value_bias: "f32[768]", p_encoder_layer_6_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_6_attention_output_dense_bias: "f32[768]", p_encoder_layer_6_layer_scale1_lambda1: "f32[768]", p_encoder_layer_6_norm2_weight: "f32[768]", p_encoder_layer_6_norm2_bias: "f32[768]", p_encoder_layer_6_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_6_mlp_fc1_bias: "f32[3072]", p_encoder_layer_6_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_6_mlp_fc2_bias: "f32[768]", p_encoder_layer_6_layer_scale2_lambda1: "f32[768]", p_encoder_layer_7_norm1_weight: "f32[768]", p_encoder_layer_7_norm1_bias: "f32[768]", p_encoder_layer_7_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_7_attention_attention_query_bias: "f32[768]", p_encoder_layer_7_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_7_attention_attention_key_bias: "f32[768]", p_encoder_layer_7_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_7_attention_attention_value_bias: "f32[768]", p_encoder_layer_7_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_7_attention_output_dense_bias: "f32[768]", p_encoder_layer_7_layer_scale1_lambda1: "f32[768]", p_encoder_layer_7_norm2_weight: "f32[768]", p_encoder_layer_7_norm2_bias: "f32[768]", p_encoder_layer_7_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_7_mlp_fc1_bias: "f32[3072]", p_encoder_layer_7_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_7_mlp_fc2_bias: "f32[768]", p_encoder_layer_7_layer_scale2_lambda1: "f32[768]", p_encoder_layer_8_norm1_weight: "f32[768]", p_encoder_layer_8_norm1_bias: "f32[768]", p_encoder_layer_8_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_8_attention_attention_query_bias: "f32[768]", p_encoder_layer_8_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_8_attention_attention_key_bias: "f32[768]", p_encoder_layer_8_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_8_attention_attention_value_bias: "f32[768]", p_encoder_layer_8_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_8_attention_output_dense_bias: "f32[768]", p_encoder_layer_8_layer_scale1_lambda1: "f32[768]", p_encoder_layer_8_norm2_weight: "f32[768]", p_encoder_layer_8_norm2_bias: "f32[768]", p_encoder_layer_8_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_8_mlp_fc1_bias: "f32[3072]", p_encoder_layer_8_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_8_mlp_fc2_bias: "f32[768]", p_encoder_layer_8_layer_scale2_lambda1: "f32[768]", p_encoder_layer_9_norm1_weight: "f32[768]", p_encoder_layer_9_norm1_bias: "f32[768]", p_encoder_layer_9_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_9_attention_attention_query_bias: "f32[768]", p_encoder_layer_9_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_9_attention_attention_key_bias: "f32[768]", p_encoder_layer_9_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_9_attention_attention_value_bias: "f32[768]", p_encoder_layer_9_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_9_attention_output_dense_bias: "f32[768]", p_encoder_layer_9_layer_scale1_lambda1: "f32[768]", p_encoder_layer_9_norm2_weight: "f32[768]", p_encoder_layer_9_norm2_bias: "f32[768]", p_encoder_layer_9_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_9_mlp_fc1_bias: "f32[3072]", p_encoder_layer_9_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_9_mlp_fc2_bias: "f32[768]", p_encoder_layer_9_layer_scale2_lambda1: "f32[768]", p_encoder_layer_10_norm1_weight: "f32[768]", p_encoder_layer_10_norm1_bias: "f32[768]", p_encoder_layer_10_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_10_attention_attention_query_bias: "f32[768]", p_encoder_layer_10_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_10_attention_attention_key_bias: "f32[768]", p_encoder_layer_10_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_10_attention_attention_value_bias: "f32[768]", p_encoder_layer_10_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_10_attention_output_dense_bias: "f32[768]", p_encoder_layer_10_layer_scale1_lambda1: "f32[768]", p_encoder_layer_10_norm2_weight: "f32[768]", p_encoder_layer_10_norm2_bias: "f32[768]", p_encoder_layer_10_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_10_mlp_fc1_bias: "f32[3072]", p_encoder_layer_10_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_10_mlp_fc2_bias: "f32[768]", p_encoder_layer_10_layer_scale2_lambda1: "f32[768]", p_encoder_layer_11_norm1_weight: "f32[768]", p_encoder_layer_11_norm1_bias: "f32[768]", p_encoder_layer_11_attention_attention_query_weight: "f32[768, 768]", p_encoder_layer_11_attention_attention_query_bias: "f32[768]", p_encoder_layer_11_attention_attention_key_weight: "f32[768, 768]", p_encoder_layer_11_attention_attention_key_bias: "f32[768]", p_encoder_layer_11_attention_attention_value_weight: "f32[768, 768]", p_encoder_layer_11_attention_attention_value_bias: "f32[768]", p_encoder_layer_11_attention_output_dense_weight: "f32[768, 768]", p_encoder_layer_11_attention_output_dense_bias: "f32[768]", p_encoder_layer_11_layer_scale1_lambda1: "f32[768]", p_encoder_layer_11_norm2_weight: "f32[768]", p_encoder_layer_11_norm2_bias: "f32[768]", p_encoder_layer_11_mlp_fc1_weight: "f32[3072, 768]", p_encoder_layer_11_mlp_fc1_bias: "f32[3072]", p_encoder_layer_11_mlp_fc2_weight: "f32[768, 3072]", p_encoder_layer_11_mlp_fc2_bias: "f32[768]", p_encoder_layer_11_layer_scale2_lambda1: "f32[768]", p_layernorm_weight: "f32[768]", p_layernorm_bias: "f32[768]", pixel_values: "f32[1, 3, 224, 224]"):
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:100 in forward, code: embeddings = self.patch_embeddings(pixel_values.to(dtype=target_dtype))
+        _assert_tensor_metadata_default = torch.ops.aten._assert_tensor_metadata.default(pixel_values, dtype = torch.float32, device = device(type='cpu'), layout = torch.strided);  _assert_tensor_metadata_default = None
+        to: "f32[1, 3, 224, 224]" = torch.ops.aten.to.dtype(pixel_values, torch.float32);  pixel_values = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/conv.py:565 in forward, code: return self._conv_forward(input, self.weight, self.bias)
+        conv2d: "f32[1, 768, 16, 16]" = torch.ops.aten.conv2d.default(to, p_embeddings_patch_embeddings_projection_weight, p_embeddings_patch_embeddings_projection_bias, [14, 14]);  to = p_embeddings_patch_embeddings_projection_weight = p_embeddings_patch_embeddings_projection_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:148 in forward, code: embeddings = self.projection(pixel_values).flatten(2).transpose(1, 2)
+        flatten: "f32[1, 768, 256]" = torch.ops.aten.flatten.using_ints(conv2d, 2);  conv2d = None
+        transpose: "f32[1, 256, 768]" = torch.ops.aten.transpose.int(flatten, 1, 2);  flatten = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:108 in forward, code: cls_tokens = self.cls_token.expand(batch_size, -1, -1)
+        expand: "f32[1, 1, 768]" = torch.ops.aten.expand.default(p_embeddings_cls_token, [1, -1, -1]);  p_embeddings_cls_token = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:109 in forward, code: embeddings = torch.cat((cls_tokens, embeddings), dim=1)
+        cat: "f32[1, 257, 768]" = torch.ops.aten.cat.default([expand, transpose], 1);  expand = transpose = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:112 in forward, code: embeddings = embeddings + self.interpolate_pos_encoding(embeddings, height, width)
+        slice_1: "f32[1, 1, 768]" = torch.ops.aten.slice.Tensor(p_embeddings_position_embeddings, 1, 0, 1)
+        slice_2: "f32[1, 1369, 768]" = torch.ops.aten.slice.Tensor(p_embeddings_position_embeddings, 1, 1, 9223372036854775807);  p_embeddings_position_embeddings = None
+        reshape: "f32[1, 37, 37, 768]" = torch.ops.aten.reshape.default(slice_2, [1, 37, 37, 768]);  slice_2 = None
+        permute: "f32[1, 768, 37, 37]" = torch.ops.aten.permute.default(reshape, [0, 3, 1, 2]);  reshape = None
+        _assert_tensor_metadata_default_1 = torch.ops.aten._assert_tensor_metadata.default(permute, dtype = torch.float32, device = device(type='cpu'), layout = torch.strided);  _assert_tensor_metadata_default_1 = None
+        to_1: "f32[1, 768, 37, 37]" = torch.ops.aten.to.dtype(permute, torch.float32);  permute = None
+        upsample_bicubic2d: "f32[1, 768, 16, 16]" = torch.ops.aten.upsample_bicubic2d.vec(to_1, [16, 16], False, None);  to_1 = None
+        _assert_tensor_metadata_default_2 = torch.ops.aten._assert_tensor_metadata.default(upsample_bicubic2d, dtype = torch.float32, device = device(type='cpu'), layout = torch.strided);  _assert_tensor_metadata_default_2 = None
+        to_2: "f32[1, 768, 16, 16]" = torch.ops.aten.to.dtype(upsample_bicubic2d, torch.float32);  upsample_bicubic2d = None
+        permute_1: "f32[1, 16, 16, 768]" = torch.ops.aten.permute.default(to_2, [0, 2, 3, 1]);  to_2 = None
+        view: "f32[1, 256, 768]" = torch.ops.aten.view.default(permute_1, [1, -1, 768]);  permute_1 = None
+        cat_1: "f32[1, 257, 768]" = torch.ops.aten.cat.default([slice_1, view], 1);  slice_1 = view = None
+        add: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(cat, cat_1);  cat = cat_1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(add, 0.0, False);  add = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(dropout, [768], p_encoder_layer_0_norm1_weight, p_encoder_layer_0_norm1_bias, 1e-06, False);  p_encoder_layer_0_norm1_weight = p_encoder_layer_0_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm, p_encoder_layer_0_attention_attention_key_weight, p_encoder_layer_0_attention_attention_key_bias);  p_encoder_layer_0_attention_attention_key_weight = p_encoder_layer_0_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_1: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear, [1, -1, 12, 64]);  linear = None
+        transpose_1: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_1, 1, 2);  view_1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_1: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm, p_encoder_layer_0_attention_attention_value_weight, p_encoder_layer_0_attention_attention_value_bias);  p_encoder_layer_0_attention_attention_value_weight = p_encoder_layer_0_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_2: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_1, [1, -1, 12, 64]);  linear_1 = None
+        transpose_2: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_2, 1, 2);  view_2 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_2: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm, p_encoder_layer_0_attention_attention_query_weight, p_encoder_layer_0_attention_attention_query_bias);  layer_norm = p_encoder_layer_0_attention_attention_query_weight = p_encoder_layer_0_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_3: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_2, [1, -1, 12, 64]);  linear_2 = None
+        transpose_3: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_3, 1, 2);  view_3 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_3, transpose_1, transpose_2, scale = 0.125);  transpose_3 = transpose_1 = transpose_2 = None
+        transpose_4: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention, 1, 2);  scaled_dot_product_attention = None
+        contiguous: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_4);  transpose_4 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_1: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous, [1, 257, 768]);  contiguous = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_3: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_1, p_encoder_layer_0_attention_output_dense_weight, p_encoder_layer_0_attention_output_dense_bias);  reshape_1 = p_encoder_layer_0_attention_output_dense_weight = p_encoder_layer_0_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_1: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_3, 0.0, False);  linear_3 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_1, p_encoder_layer_0_layer_scale1_lambda1);  dropout_1 = p_encoder_layer_0_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_1: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul, dropout);  mul = dropout = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_1: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_1, [768], p_encoder_layer_0_norm2_weight, p_encoder_layer_0_norm2_bias, 1e-06, False);  p_encoder_layer_0_norm2_weight = p_encoder_layer_0_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_4: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_1, p_encoder_layer_0_mlp_fc1_weight, p_encoder_layer_0_mlp_fc1_bias);  layer_norm_1 = p_encoder_layer_0_mlp_fc1_weight = p_encoder_layer_0_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_4);  linear_4 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_5: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu, p_encoder_layer_0_mlp_fc2_weight, p_encoder_layer_0_mlp_fc2_bias);  gelu = p_encoder_layer_0_mlp_fc2_weight = p_encoder_layer_0_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_1: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_5, p_encoder_layer_0_layer_scale2_lambda1);  linear_5 = p_encoder_layer_0_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_2: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_1, add_1);  mul_1 = add_1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_2: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_2, [768], p_encoder_layer_1_norm1_weight, p_encoder_layer_1_norm1_bias, 1e-06, False);  p_encoder_layer_1_norm1_weight = p_encoder_layer_1_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_6: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_2, p_encoder_layer_1_attention_attention_key_weight, p_encoder_layer_1_attention_attention_key_bias);  p_encoder_layer_1_attention_attention_key_weight = p_encoder_layer_1_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_4: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_6, [1, -1, 12, 64]);  linear_6 = None
+        transpose_5: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_4, 1, 2);  view_4 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_7: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_2, p_encoder_layer_1_attention_attention_value_weight, p_encoder_layer_1_attention_attention_value_bias);  p_encoder_layer_1_attention_attention_value_weight = p_encoder_layer_1_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_5: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_7, [1, -1, 12, 64]);  linear_7 = None
+        transpose_6: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_5, 1, 2);  view_5 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_8: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_2, p_encoder_layer_1_attention_attention_query_weight, p_encoder_layer_1_attention_attention_query_bias);  layer_norm_2 = p_encoder_layer_1_attention_attention_query_weight = p_encoder_layer_1_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_6: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_8, [1, -1, 12, 64]);  linear_8 = None
+        transpose_7: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_6, 1, 2);  view_6 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_1: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_7, transpose_5, transpose_6, scale = 0.125);  transpose_7 = transpose_5 = transpose_6 = None
+        transpose_8: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_1, 1, 2);  scaled_dot_product_attention_1 = None
+        contiguous_1: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_8);  transpose_8 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_2: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_1, [1, 257, 768]);  contiguous_1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_9: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_2, p_encoder_layer_1_attention_output_dense_weight, p_encoder_layer_1_attention_output_dense_bias);  reshape_2 = p_encoder_layer_1_attention_output_dense_weight = p_encoder_layer_1_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_2: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_9, 0.0, False);  linear_9 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_2: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_2, p_encoder_layer_1_layer_scale1_lambda1);  dropout_2 = p_encoder_layer_1_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_3: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_2, add_2);  mul_2 = add_2 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_3: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_3, [768], p_encoder_layer_1_norm2_weight, p_encoder_layer_1_norm2_bias, 1e-06, False);  p_encoder_layer_1_norm2_weight = p_encoder_layer_1_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_10: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_3, p_encoder_layer_1_mlp_fc1_weight, p_encoder_layer_1_mlp_fc1_bias);  layer_norm_3 = p_encoder_layer_1_mlp_fc1_weight = p_encoder_layer_1_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_1: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_10);  linear_10 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_11: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_1, p_encoder_layer_1_mlp_fc2_weight, p_encoder_layer_1_mlp_fc2_bias);  gelu_1 = p_encoder_layer_1_mlp_fc2_weight = p_encoder_layer_1_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_3: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_11, p_encoder_layer_1_layer_scale2_lambda1);  linear_11 = p_encoder_layer_1_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_4: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_3, add_3);  mul_3 = add_3 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_4: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_4, [768], p_encoder_layer_2_norm1_weight, p_encoder_layer_2_norm1_bias, 1e-06, False);  p_encoder_layer_2_norm1_weight = p_encoder_layer_2_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_12: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_4, p_encoder_layer_2_attention_attention_key_weight, p_encoder_layer_2_attention_attention_key_bias);  p_encoder_layer_2_attention_attention_key_weight = p_encoder_layer_2_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_7: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_12, [1, -1, 12, 64]);  linear_12 = None
+        transpose_9: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_7, 1, 2);  view_7 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_13: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_4, p_encoder_layer_2_attention_attention_value_weight, p_encoder_layer_2_attention_attention_value_bias);  p_encoder_layer_2_attention_attention_value_weight = p_encoder_layer_2_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_8: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_13, [1, -1, 12, 64]);  linear_13 = None
+        transpose_10: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_8, 1, 2);  view_8 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_14: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_4, p_encoder_layer_2_attention_attention_query_weight, p_encoder_layer_2_attention_attention_query_bias);  layer_norm_4 = p_encoder_layer_2_attention_attention_query_weight = p_encoder_layer_2_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_9: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_14, [1, -1, 12, 64]);  linear_14 = None
+        transpose_11: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_9, 1, 2);  view_9 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_2: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_11, transpose_9, transpose_10, scale = 0.125);  transpose_11 = transpose_9 = transpose_10 = None
+        transpose_12: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_2, 1, 2);  scaled_dot_product_attention_2 = None
+        contiguous_2: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_12);  transpose_12 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_3: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_2, [1, 257, 768]);  contiguous_2 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_15: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_3, p_encoder_layer_2_attention_output_dense_weight, p_encoder_layer_2_attention_output_dense_bias);  reshape_3 = p_encoder_layer_2_attention_output_dense_weight = p_encoder_layer_2_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_3: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_15, 0.0, False);  linear_15 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_4: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_3, p_encoder_layer_2_layer_scale1_lambda1);  dropout_3 = p_encoder_layer_2_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_5: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_4, add_4);  mul_4 = add_4 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_5: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_5, [768], p_encoder_layer_2_norm2_weight, p_encoder_layer_2_norm2_bias, 1e-06, False);  p_encoder_layer_2_norm2_weight = p_encoder_layer_2_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_16: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_5, p_encoder_layer_2_mlp_fc1_weight, p_encoder_layer_2_mlp_fc1_bias);  layer_norm_5 = p_encoder_layer_2_mlp_fc1_weight = p_encoder_layer_2_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_2: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_16);  linear_16 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_17: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_2, p_encoder_layer_2_mlp_fc2_weight, p_encoder_layer_2_mlp_fc2_bias);  gelu_2 = p_encoder_layer_2_mlp_fc2_weight = p_encoder_layer_2_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_5: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_17, p_encoder_layer_2_layer_scale2_lambda1);  linear_17 = p_encoder_layer_2_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_6: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_5, add_5);  mul_5 = add_5 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_6: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_6, [768], p_encoder_layer_3_norm1_weight, p_encoder_layer_3_norm1_bias, 1e-06, False);  p_encoder_layer_3_norm1_weight = p_encoder_layer_3_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_18: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_6, p_encoder_layer_3_attention_attention_key_weight, p_encoder_layer_3_attention_attention_key_bias);  p_encoder_layer_3_attention_attention_key_weight = p_encoder_layer_3_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_10: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_18, [1, -1, 12, 64]);  linear_18 = None
+        transpose_13: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_10, 1, 2);  view_10 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_19: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_6, p_encoder_layer_3_attention_attention_value_weight, p_encoder_layer_3_attention_attention_value_bias);  p_encoder_layer_3_attention_attention_value_weight = p_encoder_layer_3_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_11: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_19, [1, -1, 12, 64]);  linear_19 = None
+        transpose_14: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_11, 1, 2);  view_11 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_20: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_6, p_encoder_layer_3_attention_attention_query_weight, p_encoder_layer_3_attention_attention_query_bias);  layer_norm_6 = p_encoder_layer_3_attention_attention_query_weight = p_encoder_layer_3_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_12: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_20, [1, -1, 12, 64]);  linear_20 = None
+        transpose_15: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_12, 1, 2);  view_12 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_3: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_15, transpose_13, transpose_14, scale = 0.125);  transpose_15 = transpose_13 = transpose_14 = None
+        transpose_16: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_3, 1, 2);  scaled_dot_product_attention_3 = None
+        contiguous_3: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_16);  transpose_16 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_4: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_3, [1, 257, 768]);  contiguous_3 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_21: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_4, p_encoder_layer_3_attention_output_dense_weight, p_encoder_layer_3_attention_output_dense_bias);  reshape_4 = p_encoder_layer_3_attention_output_dense_weight = p_encoder_layer_3_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_4: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_21, 0.0, False);  linear_21 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_6: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_4, p_encoder_layer_3_layer_scale1_lambda1);  dropout_4 = p_encoder_layer_3_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_7: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_6, add_6);  mul_6 = add_6 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_7: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_7, [768], p_encoder_layer_3_norm2_weight, p_encoder_layer_3_norm2_bias, 1e-06, False);  p_encoder_layer_3_norm2_weight = p_encoder_layer_3_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_22: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_7, p_encoder_layer_3_mlp_fc1_weight, p_encoder_layer_3_mlp_fc1_bias);  layer_norm_7 = p_encoder_layer_3_mlp_fc1_weight = p_encoder_layer_3_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_3: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_22);  linear_22 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_23: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_3, p_encoder_layer_3_mlp_fc2_weight, p_encoder_layer_3_mlp_fc2_bias);  gelu_3 = p_encoder_layer_3_mlp_fc2_weight = p_encoder_layer_3_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_7: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_23, p_encoder_layer_3_layer_scale2_lambda1);  linear_23 = p_encoder_layer_3_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_8: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_7, add_7);  mul_7 = add_7 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_8: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_8, [768], p_encoder_layer_4_norm1_weight, p_encoder_layer_4_norm1_bias, 1e-06, False);  p_encoder_layer_4_norm1_weight = p_encoder_layer_4_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_24: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_8, p_encoder_layer_4_attention_attention_key_weight, p_encoder_layer_4_attention_attention_key_bias);  p_encoder_layer_4_attention_attention_key_weight = p_encoder_layer_4_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_13: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_24, [1, -1, 12, 64]);  linear_24 = None
+        transpose_17: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_13, 1, 2);  view_13 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_25: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_8, p_encoder_layer_4_attention_attention_value_weight, p_encoder_layer_4_attention_attention_value_bias);  p_encoder_layer_4_attention_attention_value_weight = p_encoder_layer_4_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_14: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_25, [1, -1, 12, 64]);  linear_25 = None
+        transpose_18: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_14, 1, 2);  view_14 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_26: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_8, p_encoder_layer_4_attention_attention_query_weight, p_encoder_layer_4_attention_attention_query_bias);  layer_norm_8 = p_encoder_layer_4_attention_attention_query_weight = p_encoder_layer_4_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_15: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_26, [1, -1, 12, 64]);  linear_26 = None
+        transpose_19: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_15, 1, 2);  view_15 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_4: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_19, transpose_17, transpose_18, scale = 0.125);  transpose_19 = transpose_17 = transpose_18 = None
+        transpose_20: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_4, 1, 2);  scaled_dot_product_attention_4 = None
+        contiguous_4: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_20);  transpose_20 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_5: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_4, [1, 257, 768]);  contiguous_4 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_27: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_5, p_encoder_layer_4_attention_output_dense_weight, p_encoder_layer_4_attention_output_dense_bias);  reshape_5 = p_encoder_layer_4_attention_output_dense_weight = p_encoder_layer_4_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_5: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_27, 0.0, False);  linear_27 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_8: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_5, p_encoder_layer_4_layer_scale1_lambda1);  dropout_5 = p_encoder_layer_4_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_9: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_8, add_8);  mul_8 = add_8 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_9: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_9, [768], p_encoder_layer_4_norm2_weight, p_encoder_layer_4_norm2_bias, 1e-06, False);  p_encoder_layer_4_norm2_weight = p_encoder_layer_4_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_28: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_9, p_encoder_layer_4_mlp_fc1_weight, p_encoder_layer_4_mlp_fc1_bias);  layer_norm_9 = p_encoder_layer_4_mlp_fc1_weight = p_encoder_layer_4_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_4: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_28);  linear_28 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_29: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_4, p_encoder_layer_4_mlp_fc2_weight, p_encoder_layer_4_mlp_fc2_bias);  gelu_4 = p_encoder_layer_4_mlp_fc2_weight = p_encoder_layer_4_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_9: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_29, p_encoder_layer_4_layer_scale2_lambda1);  linear_29 = p_encoder_layer_4_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_10: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_9, add_9);  mul_9 = add_9 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_10: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_10, [768], p_encoder_layer_5_norm1_weight, p_encoder_layer_5_norm1_bias, 1e-06, False);  p_encoder_layer_5_norm1_weight = p_encoder_layer_5_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_30: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_10, p_encoder_layer_5_attention_attention_key_weight, p_encoder_layer_5_attention_attention_key_bias);  p_encoder_layer_5_attention_attention_key_weight = p_encoder_layer_5_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_16: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_30, [1, -1, 12, 64]);  linear_30 = None
+        transpose_21: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_16, 1, 2);  view_16 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_31: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_10, p_encoder_layer_5_attention_attention_value_weight, p_encoder_layer_5_attention_attention_value_bias);  p_encoder_layer_5_attention_attention_value_weight = p_encoder_layer_5_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_17: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_31, [1, -1, 12, 64]);  linear_31 = None
+        transpose_22: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_17, 1, 2);  view_17 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_32: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_10, p_encoder_layer_5_attention_attention_query_weight, p_encoder_layer_5_attention_attention_query_bias);  layer_norm_10 = p_encoder_layer_5_attention_attention_query_weight = p_encoder_layer_5_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_18: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_32, [1, -1, 12, 64]);  linear_32 = None
+        transpose_23: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_18, 1, 2);  view_18 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_5: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_23, transpose_21, transpose_22, scale = 0.125);  transpose_23 = transpose_21 = transpose_22 = None
+        transpose_24: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_5, 1, 2);  scaled_dot_product_attention_5 = None
+        contiguous_5: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_24);  transpose_24 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_6: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_5, [1, 257, 768]);  contiguous_5 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_33: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_6, p_encoder_layer_5_attention_output_dense_weight, p_encoder_layer_5_attention_output_dense_bias);  reshape_6 = p_encoder_layer_5_attention_output_dense_weight = p_encoder_layer_5_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_6: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_33, 0.0, False);  linear_33 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_10: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_6, p_encoder_layer_5_layer_scale1_lambda1);  dropout_6 = p_encoder_layer_5_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_11: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_10, add_10);  mul_10 = add_10 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_11: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_11, [768], p_encoder_layer_5_norm2_weight, p_encoder_layer_5_norm2_bias, 1e-06, False);  p_encoder_layer_5_norm2_weight = p_encoder_layer_5_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_34: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_11, p_encoder_layer_5_mlp_fc1_weight, p_encoder_layer_5_mlp_fc1_bias);  layer_norm_11 = p_encoder_layer_5_mlp_fc1_weight = p_encoder_layer_5_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_5: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_34);  linear_34 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_35: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_5, p_encoder_layer_5_mlp_fc2_weight, p_encoder_layer_5_mlp_fc2_bias);  gelu_5 = p_encoder_layer_5_mlp_fc2_weight = p_encoder_layer_5_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_11: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_35, p_encoder_layer_5_layer_scale2_lambda1);  linear_35 = p_encoder_layer_5_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_12: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_11, add_11);  mul_11 = add_11 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_12: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_12, [768], p_encoder_layer_6_norm1_weight, p_encoder_layer_6_norm1_bias, 1e-06, False);  p_encoder_layer_6_norm1_weight = p_encoder_layer_6_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_36: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_12, p_encoder_layer_6_attention_attention_key_weight, p_encoder_layer_6_attention_attention_key_bias);  p_encoder_layer_6_attention_attention_key_weight = p_encoder_layer_6_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_19: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_36, [1, -1, 12, 64]);  linear_36 = None
+        transpose_25: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_19, 1, 2);  view_19 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_37: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_12, p_encoder_layer_6_attention_attention_value_weight, p_encoder_layer_6_attention_attention_value_bias);  p_encoder_layer_6_attention_attention_value_weight = p_encoder_layer_6_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_20: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_37, [1, -1, 12, 64]);  linear_37 = None
+        transpose_26: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_20, 1, 2);  view_20 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_38: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_12, p_encoder_layer_6_attention_attention_query_weight, p_encoder_layer_6_attention_attention_query_bias);  layer_norm_12 = p_encoder_layer_6_attention_attention_query_weight = p_encoder_layer_6_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_21: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_38, [1, -1, 12, 64]);  linear_38 = None
+        transpose_27: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_21, 1, 2);  view_21 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_6: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_27, transpose_25, transpose_26, scale = 0.125);  transpose_27 = transpose_25 = transpose_26 = None
+        transpose_28: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_6, 1, 2);  scaled_dot_product_attention_6 = None
+        contiguous_6: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_28);  transpose_28 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_7: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_6, [1, 257, 768]);  contiguous_6 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_39: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_7, p_encoder_layer_6_attention_output_dense_weight, p_encoder_layer_6_attention_output_dense_bias);  reshape_7 = p_encoder_layer_6_attention_output_dense_weight = p_encoder_layer_6_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_7: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_39, 0.0, False);  linear_39 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_12: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_7, p_encoder_layer_6_layer_scale1_lambda1);  dropout_7 = p_encoder_layer_6_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_13: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_12, add_12);  mul_12 = add_12 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_13: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_13, [768], p_encoder_layer_6_norm2_weight, p_encoder_layer_6_norm2_bias, 1e-06, False);  p_encoder_layer_6_norm2_weight = p_encoder_layer_6_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_40: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_13, p_encoder_layer_6_mlp_fc1_weight, p_encoder_layer_6_mlp_fc1_bias);  layer_norm_13 = p_encoder_layer_6_mlp_fc1_weight = p_encoder_layer_6_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_6: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_40);  linear_40 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_41: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_6, p_encoder_layer_6_mlp_fc2_weight, p_encoder_layer_6_mlp_fc2_bias);  gelu_6 = p_encoder_layer_6_mlp_fc2_weight = p_encoder_layer_6_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_13: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_41, p_encoder_layer_6_layer_scale2_lambda1);  linear_41 = p_encoder_layer_6_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_14: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_13, add_13);  mul_13 = add_13 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_14: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_14, [768], p_encoder_layer_7_norm1_weight, p_encoder_layer_7_norm1_bias, 1e-06, False);  p_encoder_layer_7_norm1_weight = p_encoder_layer_7_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_42: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_14, p_encoder_layer_7_attention_attention_key_weight, p_encoder_layer_7_attention_attention_key_bias);  p_encoder_layer_7_attention_attention_key_weight = p_encoder_layer_7_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_22: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_42, [1, -1, 12, 64]);  linear_42 = None
+        transpose_29: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_22, 1, 2);  view_22 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_43: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_14, p_encoder_layer_7_attention_attention_value_weight, p_encoder_layer_7_attention_attention_value_bias);  p_encoder_layer_7_attention_attention_value_weight = p_encoder_layer_7_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_23: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_43, [1, -1, 12, 64]);  linear_43 = None
+        transpose_30: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_23, 1, 2);  view_23 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_44: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_14, p_encoder_layer_7_attention_attention_query_weight, p_encoder_layer_7_attention_attention_query_bias);  layer_norm_14 = p_encoder_layer_7_attention_attention_query_weight = p_encoder_layer_7_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_24: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_44, [1, -1, 12, 64]);  linear_44 = None
+        transpose_31: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_24, 1, 2);  view_24 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_7: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_31, transpose_29, transpose_30, scale = 0.125);  transpose_31 = transpose_29 = transpose_30 = None
+        transpose_32: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_7, 1, 2);  scaled_dot_product_attention_7 = None
+        contiguous_7: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_32);  transpose_32 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_8: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_7, [1, 257, 768]);  contiguous_7 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_45: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_8, p_encoder_layer_7_attention_output_dense_weight, p_encoder_layer_7_attention_output_dense_bias);  reshape_8 = p_encoder_layer_7_attention_output_dense_weight = p_encoder_layer_7_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_8: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_45, 0.0, False);  linear_45 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_14: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_8, p_encoder_layer_7_layer_scale1_lambda1);  dropout_8 = p_encoder_layer_7_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_15: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_14, add_14);  mul_14 = add_14 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_15: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_15, [768], p_encoder_layer_7_norm2_weight, p_encoder_layer_7_norm2_bias, 1e-06, False);  p_encoder_layer_7_norm2_weight = p_encoder_layer_7_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_46: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_15, p_encoder_layer_7_mlp_fc1_weight, p_encoder_layer_7_mlp_fc1_bias);  layer_norm_15 = p_encoder_layer_7_mlp_fc1_weight = p_encoder_layer_7_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_7: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_46);  linear_46 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_47: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_7, p_encoder_layer_7_mlp_fc2_weight, p_encoder_layer_7_mlp_fc2_bias);  gelu_7 = p_encoder_layer_7_mlp_fc2_weight = p_encoder_layer_7_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_15: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_47, p_encoder_layer_7_layer_scale2_lambda1);  linear_47 = p_encoder_layer_7_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_16: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_15, add_15);  mul_15 = add_15 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_16: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_16, [768], p_encoder_layer_8_norm1_weight, p_encoder_layer_8_norm1_bias, 1e-06, False);  p_encoder_layer_8_norm1_weight = p_encoder_layer_8_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_48: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_16, p_encoder_layer_8_attention_attention_key_weight, p_encoder_layer_8_attention_attention_key_bias);  p_encoder_layer_8_attention_attention_key_weight = p_encoder_layer_8_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_25: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_48, [1, -1, 12, 64]);  linear_48 = None
+        transpose_33: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_25, 1, 2);  view_25 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_49: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_16, p_encoder_layer_8_attention_attention_value_weight, p_encoder_layer_8_attention_attention_value_bias);  p_encoder_layer_8_attention_attention_value_weight = p_encoder_layer_8_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_26: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_49, [1, -1, 12, 64]);  linear_49 = None
+        transpose_34: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_26, 1, 2);  view_26 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_50: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_16, p_encoder_layer_8_attention_attention_query_weight, p_encoder_layer_8_attention_attention_query_bias);  layer_norm_16 = p_encoder_layer_8_attention_attention_query_weight = p_encoder_layer_8_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_27: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_50, [1, -1, 12, 64]);  linear_50 = None
+        transpose_35: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_27, 1, 2);  view_27 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_8: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_35, transpose_33, transpose_34, scale = 0.125);  transpose_35 = transpose_33 = transpose_34 = None
+        transpose_36: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_8, 1, 2);  scaled_dot_product_attention_8 = None
+        contiguous_8: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_36);  transpose_36 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_9: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_8, [1, 257, 768]);  contiguous_8 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_51: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_9, p_encoder_layer_8_attention_output_dense_weight, p_encoder_layer_8_attention_output_dense_bias);  reshape_9 = p_encoder_layer_8_attention_output_dense_weight = p_encoder_layer_8_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_9: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_51, 0.0, False);  linear_51 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_16: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_9, p_encoder_layer_8_layer_scale1_lambda1);  dropout_9 = p_encoder_layer_8_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_17: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_16, add_16);  mul_16 = add_16 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_17: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_17, [768], p_encoder_layer_8_norm2_weight, p_encoder_layer_8_norm2_bias, 1e-06, False);  p_encoder_layer_8_norm2_weight = p_encoder_layer_8_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_52: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_17, p_encoder_layer_8_mlp_fc1_weight, p_encoder_layer_8_mlp_fc1_bias);  layer_norm_17 = p_encoder_layer_8_mlp_fc1_weight = p_encoder_layer_8_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_8: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_52);  linear_52 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_53: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_8, p_encoder_layer_8_mlp_fc2_weight, p_encoder_layer_8_mlp_fc2_bias);  gelu_8 = p_encoder_layer_8_mlp_fc2_weight = p_encoder_layer_8_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_17: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_53, p_encoder_layer_8_layer_scale2_lambda1);  linear_53 = p_encoder_layer_8_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_18: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_17, add_17);  mul_17 = add_17 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_18: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_18, [768], p_encoder_layer_9_norm1_weight, p_encoder_layer_9_norm1_bias, 1e-06, False);  p_encoder_layer_9_norm1_weight = p_encoder_layer_9_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_54: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_18, p_encoder_layer_9_attention_attention_key_weight, p_encoder_layer_9_attention_attention_key_bias);  p_encoder_layer_9_attention_attention_key_weight = p_encoder_layer_9_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_28: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_54, [1, -1, 12, 64]);  linear_54 = None
+        transpose_37: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_28, 1, 2);  view_28 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_55: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_18, p_encoder_layer_9_attention_attention_value_weight, p_encoder_layer_9_attention_attention_value_bias);  p_encoder_layer_9_attention_attention_value_weight = p_encoder_layer_9_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_29: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_55, [1, -1, 12, 64]);  linear_55 = None
+        transpose_38: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_29, 1, 2);  view_29 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_56: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_18, p_encoder_layer_9_attention_attention_query_weight, p_encoder_layer_9_attention_attention_query_bias);  layer_norm_18 = p_encoder_layer_9_attention_attention_query_weight = p_encoder_layer_9_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_30: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_56, [1, -1, 12, 64]);  linear_56 = None
+        transpose_39: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_30, 1, 2);  view_30 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_9: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_39, transpose_37, transpose_38, scale = 0.125);  transpose_39 = transpose_37 = transpose_38 = None
+        transpose_40: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_9, 1, 2);  scaled_dot_product_attention_9 = None
+        contiguous_9: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_40);  transpose_40 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_10: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_9, [1, 257, 768]);  contiguous_9 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_57: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_10, p_encoder_layer_9_attention_output_dense_weight, p_encoder_layer_9_attention_output_dense_bias);  reshape_10 = p_encoder_layer_9_attention_output_dense_weight = p_encoder_layer_9_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_10: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_57, 0.0, False);  linear_57 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_18: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_10, p_encoder_layer_9_layer_scale1_lambda1);  dropout_10 = p_encoder_layer_9_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_19: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_18, add_18);  mul_18 = add_18 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_19: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_19, [768], p_encoder_layer_9_norm2_weight, p_encoder_layer_9_norm2_bias, 1e-06, False);  p_encoder_layer_9_norm2_weight = p_encoder_layer_9_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_58: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_19, p_encoder_layer_9_mlp_fc1_weight, p_encoder_layer_9_mlp_fc1_bias);  layer_norm_19 = p_encoder_layer_9_mlp_fc1_weight = p_encoder_layer_9_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_9: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_58);  linear_58 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_59: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_9, p_encoder_layer_9_mlp_fc2_weight, p_encoder_layer_9_mlp_fc2_bias);  gelu_9 = p_encoder_layer_9_mlp_fc2_weight = p_encoder_layer_9_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_19: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_59, p_encoder_layer_9_layer_scale2_lambda1);  linear_59 = p_encoder_layer_9_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_20: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_19, add_19);  mul_19 = add_19 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_20: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_20, [768], p_encoder_layer_10_norm1_weight, p_encoder_layer_10_norm1_bias, 1e-06, False);  p_encoder_layer_10_norm1_weight = p_encoder_layer_10_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_60: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_20, p_encoder_layer_10_attention_attention_key_weight, p_encoder_layer_10_attention_attention_key_bias);  p_encoder_layer_10_attention_attention_key_weight = p_encoder_layer_10_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_31: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_60, [1, -1, 12, 64]);  linear_60 = None
+        transpose_41: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_31, 1, 2);  view_31 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_61: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_20, p_encoder_layer_10_attention_attention_value_weight, p_encoder_layer_10_attention_attention_value_bias);  p_encoder_layer_10_attention_attention_value_weight = p_encoder_layer_10_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_32: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_61, [1, -1, 12, 64]);  linear_61 = None
+        transpose_42: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_32, 1, 2);  view_32 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_62: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_20, p_encoder_layer_10_attention_attention_query_weight, p_encoder_layer_10_attention_attention_query_bias);  layer_norm_20 = p_encoder_layer_10_attention_attention_query_weight = p_encoder_layer_10_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_33: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_62, [1, -1, 12, 64]);  linear_62 = None
+        transpose_43: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_33, 1, 2);  view_33 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_10: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_43, transpose_41, transpose_42, scale = 0.125);  transpose_43 = transpose_41 = transpose_42 = None
+        transpose_44: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_10, 1, 2);  scaled_dot_product_attention_10 = None
+        contiguous_10: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_44);  transpose_44 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_11: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_10, [1, 257, 768]);  contiguous_10 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_63: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_11, p_encoder_layer_10_attention_output_dense_weight, p_encoder_layer_10_attention_output_dense_bias);  reshape_11 = p_encoder_layer_10_attention_output_dense_weight = p_encoder_layer_10_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_11: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_63, 0.0, False);  linear_63 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_20: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_11, p_encoder_layer_10_layer_scale1_lambda1);  dropout_11 = p_encoder_layer_10_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_21: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_20, add_20);  mul_20 = add_20 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_21: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_21, [768], p_encoder_layer_10_norm2_weight, p_encoder_layer_10_norm2_bias, 1e-06, False);  p_encoder_layer_10_norm2_weight = p_encoder_layer_10_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_64: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_21, p_encoder_layer_10_mlp_fc1_weight, p_encoder_layer_10_mlp_fc1_bias);  layer_norm_21 = p_encoder_layer_10_mlp_fc1_weight = p_encoder_layer_10_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_10: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_64);  linear_64 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_65: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_10, p_encoder_layer_10_mlp_fc2_weight, p_encoder_layer_10_mlp_fc2_bias);  gelu_10 = p_encoder_layer_10_mlp_fc2_weight = p_encoder_layer_10_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_21: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_65, p_encoder_layer_10_layer_scale2_lambda1);  linear_65 = p_encoder_layer_10_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_22: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_21, add_21);  mul_21 = add_21 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_22: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_22, [768], p_encoder_layer_11_norm1_weight, p_encoder_layer_11_norm1_bias, 1e-06, False);  p_encoder_layer_11_norm1_weight = p_encoder_layer_11_norm1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_66: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_22, p_encoder_layer_11_attention_attention_key_weight, p_encoder_layer_11_attention_attention_key_bias);  p_encoder_layer_11_attention_attention_key_weight = p_encoder_layer_11_attention_attention_key_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:211 in forward, code: key_layer = self.key(hidden_states).view(*new_shape).transpose(1, 2)
+        view_34: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_66, [1, -1, 12, 64]);  linear_66 = None
+        transpose_45: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_34, 1, 2);  view_34 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_67: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_22, p_encoder_layer_11_attention_attention_value_weight, p_encoder_layer_11_attention_attention_value_bias);  p_encoder_layer_11_attention_attention_value_weight = p_encoder_layer_11_attention_attention_value_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:212 in forward, code: value_layer = self.value(hidden_states).view(*new_shape).transpose(1, 2)
+        view_35: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_67, [1, -1, 12, 64]);  linear_67 = None
+        transpose_46: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_35, 1, 2);  view_35 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_68: "f32[1, 257, 768]" = torch.ops.aten.linear.default(layer_norm_22, p_encoder_layer_11_attention_attention_query_weight, p_encoder_layer_11_attention_attention_query_bias);  layer_norm_22 = p_encoder_layer_11_attention_attention_query_weight = p_encoder_layer_11_attention_attention_query_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:213 in forward, code: query_layer = self.query(hidden_states).view(*new_shape).transpose(1, 2)
+        view_36: "f32[1, 257, 12, 64]" = torch.ops.aten.view.default(linear_68, [1, -1, 12, 64]);  linear_68 = None
+        transpose_47: "f32[1, 12, 257, 64]" = torch.ops.aten.transpose.int(view_36, 1, 2);  view_36 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:219 in forward, code: context_layer, attention_probs = attention_interface(
+        scaled_dot_product_attention_11: "f32[1, 12, 257, 64]" = torch.ops.aten.scaled_dot_product_attention.default(transpose_47, transpose_45, transpose_46, scale = 0.125);  transpose_47 = transpose_45 = transpose_46 = None
+        transpose_48: "f32[1, 257, 12, 64]" = torch.ops.aten.transpose.int(scaled_dot_product_attention_11, 1, 2);  scaled_dot_product_attention_11 = None
+        contiguous_11: "f32[1, 257, 12, 64]" = torch.ops.aten.contiguous.default(transpose_48);  transpose_48 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:232 in forward, code: context_layer = context_layer.reshape(new_context_layer_shape)
+        reshape_12: "f32[1, 257, 768]" = torch.ops.aten.reshape.default(contiguous_11, [1, 257, 768]);  contiguous_11 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_69: "f32[1, 257, 768]" = torch.ops.aten.linear.default(reshape_12, p_encoder_layer_11_attention_output_dense_weight, p_encoder_layer_11_attention_output_dense_bias);  reshape_12 = p_encoder_layer_11_attention_output_dense_weight = p_encoder_layer_11_attention_output_dense_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/dropout.py:73 in forward, code: return F.dropout(input, self.p, self.training, self.inplace)
+        dropout_12: "f32[1, 257, 768]" = torch.ops.aten.dropout.default(linear_69, 0.0, False);  linear_69 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_22: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(dropout_12, p_encoder_layer_11_layer_scale1_lambda1);  dropout_12 = p_encoder_layer_11_layer_scale1_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:370 in forward, code: hidden_states = self.drop_path(self_attention_output) + hidden_states
+        add_23: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_22, add_22);  mul_22 = add_22 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_23: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_23, [768], p_encoder_layer_11_norm2_weight, p_encoder_layer_11_norm2_bias, 1e-06, False);  p_encoder_layer_11_norm2_weight = p_encoder_layer_11_norm2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_70: "f32[1, 257, 3072]" = torch.ops.aten.linear.default(layer_norm_23, p_encoder_layer_11_mlp_fc1_weight, p_encoder_layer_11_mlp_fc1_bias);  layer_norm_23 = p_encoder_layer_11_mlp_fc1_weight = p_encoder_layer_11_mlp_fc1_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/activations.py:89 in forward, code: return self.act(input)
+        gelu_11: "f32[1, 257, 3072]" = torch.ops.aten.gelu.default(linear_70);  linear_70 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/linear.py:134 in forward, code: return F.linear(input, self.weight, self.bias)
+        linear_71: "f32[1, 257, 768]" = torch.ops.aten.linear.default(gelu_11, p_encoder_layer_11_mlp_fc2_weight, p_encoder_layer_11_mlp_fc2_bias);  gelu_11 = p_encoder_layer_11_mlp_fc2_weight = p_encoder_layer_11_mlp_fc2_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:278 in forward, code: return hidden_state * self.lambda1
+        mul_23: "f32[1, 257, 768]" = torch.ops.aten.mul.Tensor(linear_71, p_encoder_layer_11_layer_scale2_lambda1);  linear_71 = p_encoder_layer_11_layer_scale2_lambda1 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:378 in forward, code: layer_output = self.drop_path(layer_output) + hidden_states
+        add_24: "f32[1, 257, 768]" = torch.ops.aten.add.Tensor(mul_23, add_23);  mul_23 = add_23 = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/torch/nn/modules/normalization.py:228 in forward, code: return F.layer_norm(
+        layer_norm_24: "f32[1, 257, 768]" = torch.ops.aten.layer_norm.default(add_24, [768], p_layernorm_weight, p_layernorm_bias, 1e-06, False);  add_24 = p_layernorm_weight = p_layernorm_bias = None
+
+        # File: /home/user/.venv-export/lib/python3.11/site-packages/transformers/models/dinov2/modeling_dinov2.py:470 in forward, code: pooled_output = sequence_output[:, 0, :]
+        select: "f32[1, 768]" = torch.ops.aten.select.int(layer_norm_24, 1, 0)
+        return (layer_norm_24, select)
