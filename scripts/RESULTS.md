@@ -206,6 +206,17 @@ in line with Deformable/Conditional DETR). Skipped matches:
 fix to report upstream: recomposition is an optimisation hint, so one failing
 match should degrade gracefully rather than abort `transform()`.
 
+**Version coverage.** The crash was confirmed on both **embedl-deploy 0.8.0**
+(consistent) and **0.7.0** (`KeyError: add_89` on `rtdetr_v2_r18vd`) — the two
+defective code paths (`get_transformation_plan` overlap resolution and
+`tree/replace.py::_insert_module`) are identical across releases. The
+manifestation is **order-sensitive**: it reproduced on every run against a torch
+**CPU wheel**, but stopped after the same venv's torch was swapped to a CUDA
+wheel (`2.12.1+cu130`) — the graph/allocation change shifts the match
+application order out of the failing window (a correctness bug that depends on
+`id()`-hashed node ordering). Full write-up — root cause, minimal architecture,
+suggested fixes — in **`scripts/BUG_REPORT_embedl_rtdetr.md`**.
+
 ## Bonus: trending top-10 LLMs (ATen export)
 
 Run with `--trending`. On this CPU box the literal top-10 trending models are
