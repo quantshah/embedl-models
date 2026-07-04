@@ -152,6 +152,60 @@ export fine to a HuggingFace ATen graph, so the graph itself is sound). Worth
 reporting upstream to Embedl-Deploy. (rel-diff again reflects random-noise
 calibration, not real-data accuracy.)
 
+### Deep dive: why RT-DETR / RT-DETRv2 fail Embedl-Deploy `transform()`
+
+`scripts/rtdetr_embedl_diagnosis.py` reproduces and explains the
+`KeyError: add_89`. Both RT-DETR models export to a valid HuggingFace ATen graph
+and run a matching forward, so the model graph is sound — the failure is inside
+Embedl-Deploy's **recomposition phase** (`transform()` → `prepare_graph()` →
+`export_trace()` → `apply_transformation_plan()`).
+
+**Root cause (embedl-deploy 0.8.0).** Recomposition patterns are applied
+sequentially in one `ReplaceSession`, and `AtenConv2dPattern` (registry index 4)
+runs before `AtenActivationPattern` (index 6):
+
+- A residual/bias `add` node (`add_89`, `aten.add.Tensor`) that feeds a
+  `sigmoid` is detached and erased while an earlier pattern is applied, **without
+  being recorded in the `ReplaceSession` replaced-node map**.
+- When `AtenActivationPattern` recomposes that `sigmoid` into `nn.Sigmoid`,
+  `replace_tree()` → `_insert_module()` computes
+  `max(args, key=_graph_order(gm))` over its inputs. `add_89` is now in neither
+  the graph nor the remap (verified: `in_graph=False`, `in_replaced_map=False`,
+  `users=[]`), so the `_graph_order` dict lookup raises `KeyError: add_89`.
+
+Two contributing embedl-deploy issues:
+1. `apply_transformation_plan()`'s overlap guard checks only each match's
+   **tree nodes** (`get_tree_nodes()`), not the **input nodes** shared between
+   matches — so a node can be erased by one match while still referenced as
+   another match's input.
+2. `_insert_module()`'s `max(args, key=_graph_order(gm))` assumes every input
+   arg is still present, turning a stale reference into a `KeyError` instead of
+   remapping or skipping.
+
+RT-DETR hits this because its decoder applies `sigmoid` to reference-point /
+query-selection tensors that **share an `add` producer** with a conv/linear that
+recomposition rewrites; DETR, RF-DETR, YOLOS, Deformable and Conditional DETR
+lack that exact shared-input shape. A second, independent latent failure exists:
+`AtenLinearPattern._make_linear` asserts `isinstance(args[1], fx.Node)` on some
+RT-DETR linears.
+
+**Work-around (verified).** Both failures raise *before* mutating the graph, so a
+single failing recomposition match can be skipped safely. `--fix` wraps
+`Pattern.replace` to skip an individually-failing match instead of aborting the
+whole transform:
+
+```
+python scripts/rtdetr_embedl_diagnosis.py            # reproduce + diagnose
+python scripts/rtdetr_embedl_diagnosis.py --fix      # RT-DETR then passes
+```
+
+With the shim, both models transform + INT8-quantize + run a forward
+(RT-DETRv2: 518 fused ops, rel-diff 0.64; RT-DETR: 826 ops, rel-diff 0.63 —
+in line with Deformable/Conditional DETR). Skipped matches:
+`AtenActivationPattern` and `AtenLinearPattern` only. This is a good candidate
+fix to report upstream: recomposition is an optimisation hint, so one failing
+match should degrade gracefully rather than abort `transform()`.
+
 ## Bonus: trending top-10 LLMs (ATen export)
 
 Run with `--trending`. On this CPU box the literal top-10 trending models are
