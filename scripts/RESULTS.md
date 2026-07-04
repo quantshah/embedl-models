@@ -102,6 +102,56 @@ Notes:
   This is a resource limit here, not an API defect; `Qwen/Qwen3-0.6B` (a
   standard decoder) quantizes cleanly with the lowest error of the set (0.011).
 
+## 3. DETR-family object detectors (RF-DETR and relatives)
+
+Prompted by "more models like RF-DETR". RF-DETR itself is on the Hub as a
+transformers model (`Roboflow/rf-detr-*`, `RfDetrForObjectDetection`), so the
+*actual* RF-DETR is tested alongside its relatives. Run with:
+
+```bash
+python scripts/check_aten_export.py --only rf_detr rtdetr rtdetrv2 \
+    deformable_detr conditional_detr deta yolos table_transformer
+python scripts/check_embedl_quantize.py --keys rf_detr rtdetr rtdetrv2 \
+    deformable_detr conditional_detr yolos table_transformer
+```
+
+### ATen export (`transformers.exporters`)
+
+| Model | Architecture | ATen ops | ex+fwd+match |
+|-------|--------------|---------:|:------------:|
+| Roboflow/rf-detr-nano | RfDetrForObjectDetection | 753 | ✅ |
+| PekingU/rtdetr_r50vd | RTDetrForObjectDetection | 1746 | ✅ |
+| PekingU/rtdetr_v2_r18vd | RTDetrV2ForObjectDetection | 1028 | ✅ |
+| SenseTime/deformable-detr | DeformableDetrForObjectDetection | 2291 | ✅ |
+| microsoft/conditional-detr-resnet-50 | ConditionalDetrForObjectDetection | 1502 | ✅ |
+| hustvl/yolos-tiny | YolosForObjectDetection | 307 | ✅ |
+| microsoft/table-transformer-detection | TableTransformerForObjectDetection | 1175 | ✅ |
+| jozhang97/deta-resnet-50 | DetaForObjectDetection | — | ❌ load |
+
+**7/8 export to an ATen graph and forward-match** — including RF-DETR itself and
+Deformable DETR (whose multi-scale deformable attention traces fine). **DETA**
+fails to load: `model_type=deta` was removed from current transformers
+(`does not recognize this architecture`).
+
+### Embedl-Deploy transform + quantize (INT8 PTQ)
+
+| Model | fused ops | fq nodes | tf | q | rel-diff |
+|-------|----------:|---------:|:--:|:-:|---------:|
+| Roboflow/rf-detr-nano | 278 | 106 | ✅ | ✅ | 0.55 |
+| PekingU/rtdetr_r50vd | — | — | ❌ | ❌ | — |
+| PekingU/rtdetr_v2_r18vd | — | — | ❌ | ❌ | — |
+| SenseTime/deformable-detr | 1278 | 152 | ✅ | ✅ | 0.65 |
+| microsoft/conditional-detr-resnet-50 | 664 | 142 | ✅ | ✅ | 0.56 |
+| hustvl/yolos-tiny | 71 | 40 | ✅ | ✅ | 0.060 |
+| microsoft/table-transformer-detection | 504 | 106 | ✅ | ✅ | 0.19 |
+
+**5/7 transform + quantize cleanly**, including **RF-DETR**. Finding:
+**RT-DETR and RT-DETRv2 both fail `transform()` with `KeyError: add_<n>`** — a
+node-reference bug in an Embedl-Deploy fusion pass on the RT-DETR graph (they
+export fine to a HuggingFace ATen graph, so the graph itself is sound). Worth
+reporting upstream to Embedl-Deploy. (rel-diff again reflects random-noise
+calibration, not real-data accuracy.)
+
 ## Bonus: trending top-10 LLMs (ATen export)
 
 Run with `--trending`. On this CPU box the literal top-10 trending models are

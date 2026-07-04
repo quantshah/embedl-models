@@ -214,6 +214,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--vision-only", action="store_true")
     ap.add_argument("--llm-only", action="store_true")
+    ap.add_argument("--keys", nargs="*", default=None,
+                    help="explicit SPECS keys to run (image-input models)")
     ap.add_argument("--precision", default="int8",
                     choices=["int8", "int4", "int16"])
     ap.add_argument("--json-out", default=None)
@@ -222,8 +224,11 @@ def main() -> None:
     torch.manual_seed(0)
     results: list[QResult] = []
 
-    vision = [] if args.llm_only else VISION_KEYS
-    llms = [] if args.vision_only else TRENDING_LLMS
+    if args.keys:
+        vision, llms = args.keys, []
+    else:
+        vision = [] if args.llm_only else VISION_KEYS
+        llms = [] if args.vision_only else TRENDING_LLMS
 
     n_total = len(vision) + len(llms)
     idx = 0

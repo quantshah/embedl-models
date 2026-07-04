@@ -209,4 +209,5 @@ __marimo__/
 # Generated ATen-export / quantization artifacts (reproducible via scripts/)
 aten_graphs/*.aten_graph.txt
 !aten_graphs/dinov2.aten_graph.txt
+!aten_graphs/rf_detr.aten_graph.txt
 aten_graphs/*.log
