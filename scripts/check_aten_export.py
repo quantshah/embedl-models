@@ -126,6 +126,41 @@ SPECS: dict[str, dict[str, str]] = {
     "smolvla": dict(id="lerobot/smolvla_base", category="robotics-vla",
                     auto="AutoModel", inputs="image",
                     note="LeRobot SmolVLA policy"),
+    # --- autonomous-driving scene segmentation ------------------------------
+    "segformer": dict(id="nvidia/segformer-b0-finetuned-ade-512-512",
+                      category="av-segmentation",
+                      auto="AutoModelForSemanticSegmentation", inputs="image"),
+    "mask2former": dict(id="facebook/mask2former-swin-tiny-coco-instance",
+                        category="av-segmentation",
+                        auto="AutoModel", inputs="image"),
+    # --- BEV / 3D detection (expected out-of-scope: not transformers models) -
+    "bevfusion": dict(id="qualcomm/BEVFusion", category="av-bev",
+                      auto="AutoModel", inputs="image",
+                      note="BEVFusion (mmdet3d checkpoint, not a PreTrainedModel)"),
+    # --- vision backbones ---------------------------------------------------
+    "swinv2": dict(id="microsoft/swinv2-tiny-patch4-window8-256",
+                   category="vision-backbone",
+                   auto="AutoModelForImageClassification", inputs="image"),
+    # --- speech -------------------------------------------------------------
+    "whisper": dict(id="openai/whisper-tiny", category="speech",
+                    auto="AutoModelForSpeechSeq2Seq", inputs="whisper"),
+    "wav2vec2": dict(id="facebook/wav2vec2-base-960h", category="speech",
+                     auto="AutoModelForCTC", inputs="audio"),
+    "wavlm": dict(id="microsoft/wavlm-base", category="speech",
+                  auto="AutoModel", inputs="audio"),
+    # --- text ---------------------------------------------------------------
+    "bert": dict(id="google-bert/bert-base-uncased", category="text",
+                 auto="AutoModel", inputs="text"),
+    "minilm": dict(id="sentence-transformers/all-MiniLM-L6-v2",
+                   category="text", auto="AutoModel", inputs="text"),
+    "roberta": dict(id="FacebookAI/roberta-base", category="text",
+                    auto="AutoModel", inputs="text"),
+    "modernbert": dict(id="answerdotai/ModernBERT-base", category="text",
+                       auto="AutoModel", inputs="text"),
+    "gpt2": dict(id="openai-community/gpt2", category="text",
+                 auto="AutoModelForCausalLM", inputs="text"),
+    "t5": dict(id="google-t5/t5-small", category="text",
+               auto="AutoModelForSeq2SeqLM", inputs="text_seq2seq"),
 }
 
 
@@ -157,6 +192,10 @@ def _random_image(h: int = 480, w: int = 640):
 
 
 def _build_inputs(kind: str, model_id: str) -> dict[str, torch.Tensor]:
+    # Text / raw-audio kinds build tensors directly and need no processor
+    # (some audio checkpoints ship no tokenizer/processor at all).
+    if kind in ("text", "text_seq2seq", "audio", "whisper"):
+        return _build_non_image_inputs(kind, model_id)
     from transformers import AutoProcessor
     processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
     img = _random_image()
@@ -174,6 +213,39 @@ def _build_inputs(kind: str, model_id: str) -> dict[str, torch.Tensor]:
     else:
         raise ValueError(f"unknown input kind {kind}")
     return dict(enc)
+
+
+def _build_non_image_inputs(kind: str, model_id: str) -> dict[str, torch.Tensor]:
+    """Build text / raw-audio / whisper inputs without an image processor."""
+    torch.manual_seed(0)
+    if kind == "text":
+        from transformers import AutoTokenizer
+        tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+        enc = tok("The quick brown fox jumps over the lazy dog.",
+                  return_tensors="pt")
+        # token_type_ids can trip export for some models; keep ids + mask.
+        return {k: v for k, v in enc.items()
+                if k in ("input_ids", "attention_mask")}
+    if kind == "text_seq2seq":
+        from transformers import AutoTokenizer
+        tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+        enc = tok("translate English to German: the house is small.",
+                  return_tensors="pt")
+        dec = tok("das Haus ist klein.", return_tensors="pt")
+        return {"input_ids": enc["input_ids"],
+                "attention_mask": enc["attention_mask"],
+                "decoder_input_ids": dec["input_ids"]}
+    if kind == "audio":
+        # Raw-waveform models (wav2vec2, wavlm, hubert): 1 s @ 16 kHz.
+        return {"input_values": torch.randn(1, 16000)}
+    if kind == "whisper":
+        from transformers import AutoConfig
+        cfg = AutoConfig.from_pretrained(model_id, trust_remote_code=True)
+        n_mels = getattr(cfg, "num_mel_bins", 80)
+        return {"input_features": torch.randn(1, n_mels, 3000),
+                "decoder_input_ids": torch.tensor(
+                    [[getattr(cfg, "decoder_start_token_id", 1)]])}
+    raise ValueError(f"unknown input kind {kind}")
 
 
 # ---------------------------------------------------------------------------

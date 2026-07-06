@@ -217,6 +217,57 @@ application order out of the failing window (a correctness bug that depends on
 `id()`-hashed node ordering). Full write-up — root cause, minimal architecture,
 suggested fixes — in **`scripts/BUG_REPORT_embedl_rtdetr.md`**.
 
+## 4. Widened coverage: AV segmentation, speech, text
+
+Extends the sweep beyond vision/detection into autonomous-driving scene
+segmentation, speech, and text. Run with:
+
+```bash
+python scripts/check_aten_export.py --only segformer mask2former swinv2 \
+    whisper wav2vec2 wavlm bert minilm roberta modernbert gpt2 t5
+python scripts/check_embedl_quantize.py --keys segformer mask2former swinv2 \
+    whisper wav2vec2 wavlm bert minilm roberta modernbert gpt2 t5
+```
+
+| Model | Arch | Category | ATen ops | export | embedl tf+quant |
+|-------|------|----------|---------:|:------:|:---------------:|
+| nvidia/segformer-b0-finetuned-ade-512-512 | SegformerForSemanticSegmentation | AV segmentation | 328 | ✅ | ✅ (0.42) |
+| facebook/mask2former-swin-tiny-coco-instance | Mask2FormerModel | AV segmentation | 2734 | ✅ | ✅ (0.15) |
+| microsoft/swinv2-tiny-patch4-window8-256 | Swinv2ForImageClassification | vision backbone | 1063 | ✅ | ✅ (0.16) |
+| openai/whisper-tiny | WhisperForConditionalGeneration | speech (ASR) | 374 | ✅ | ✅ (0.27) |
+| facebook/wav2vec2-base-960h | Wav2Vec2ForCTC | speech (ASR) | 353 | ✅ | ✅ (0.57) |
+| microsoft/wavlm-base | WavLMModel | speech | 708 | ✅ | ⚠️ transform ✅, quant ✗ |
+| google-bert/bert-base-uncased | BertModel | text | 320 | ✅ | ✅ (1.0) |
+| sentence-transformers/all-MiniLM-L6-v2 | BertModel | text embedding | 182 | ✅ | ✅ (1.0) |
+| FacebookAI/roberta-base | RobertaModel | text | 331 | ✅ | ✅ (0.54) |
+| answerdotai/ModernBERT-base | ModernBertModel | text | 1269 | ✅ | ✅ (0.19) |
+| openai-community/gpt2 | GPT2LMHeadModel | text (LM) | 597 | ✅ | ✅ (0.062) |
+| google-t5/t5-small | T5ForConditionalGeneration | text (seq2seq) | 993 | ✅ | ✅ (0.080) |
+| qualcomm/BEVFusion | — | AV / BEV | — | ❌ load | — |
+
+**12/13 export to an ATen graph; 11/12 loadable also pass Embedl transform +
+INT8 quantize.** Both encoder-decoder speech/text models (Whisper, T5) export
+and quantize via a single traced forward (`input_features`/`input_ids` +
+`decoder_input_ids`).
+
+Notes:
+- **BEV / 3D detection is not on the Hub as transformers models.** Every
+  BEVFormer / BEVFusion / PETR / DETR3D checkpoint is a raw `mmdetection3d` /
+  `pytorch` artifact (`library=None`, no `model_type`) — `qualcomm/BEVFusion`
+  fails to load for exactly this reason, like GR00T / SmolVLA. Exporting them
+  would need raw `torch.export` on the `mmdet3d` `nn.Module` (custom voxel /
+  deformable-attention CUDA ops — out of scope for a CPU transformers-exporter
+  sweep). The AV perception that *is* in transformers — detection (DETR family),
+  monocular depth (Depth-Anything, DPT), and now semantic/panoptic segmentation
+  (SegFormer, Mask2Former) — all export and (mostly) quantize.
+- **WavLM** exports and `transform()`s but `quantize()` fails with a shape
+  mismatch (`768 vs 64`) in its gated relative-position attention — an
+  Embedl-Deploy quantizer limitation on that attention variant (Wav2Vec2, same
+  family without gated rel-pos, quantizes fine).
+- Text encoders show large `rel-diff` (BERT/MiniLM ≈ 1.0) purely because INT8
+  activation calibration used a single random sentence; GPT2 / T5 (0.06–0.08)
+  and ModernBERT (0.19) fare much better on the same crude calibration.
+
 ## Bonus: trending top-10 LLMs (ATen export)
 
 Run with `--trending`. On this CPU box the literal top-10 trending models are
