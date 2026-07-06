@@ -268,6 +268,42 @@ Notes:
   activation calibration used a single random sentence; GPT2 / T5 (0.06–0.08)
   and ModernBERT (0.19) fare much better on the same crude calibration.
 
+## 5. Classic backbones, DINOv3, SAM3 (incl. random-weights-from-config)
+
+Classic classifiers/backbones use real weights; **gated / unreleased models
+(DINOv3, SAM3) are instantiated from their transformers config class with random
+weights and no Hub download**, so no auth token is needed
+(`load_random_model()` — set `weights="random"` + `config_class` on the spec).
+
+```bash
+python scripts/check_aten_export.py --only vit resnet convnext convnextv2 dinov3 sam3
+python scripts/check_embedl_quantize.py --keys vit resnet convnext convnextv2 dinov3 sam3
+```
+
+| Model | Arch | Weights | ATen ops | export | embedl tf+quant |
+|-------|------|---------|---------:|:------:|:---------------:|
+| google/vit-base-patch16-224 | ViTForImageClassification | real | 306 | ✅ | ✅ (0.30) |
+| microsoft/resnet-50 | ResNetForImageClassification | real | 175 | ✅ | ✅ (0.080) |
+| facebook/convnext-tiny-224 | ConvNextForImageClassification | real | 181 | ✅ | ✅ (0.12) |
+| facebook/convnextv2-tiny-1k-224 | ConvNextV2ForImageClassification | real | 307 | ✅ | ✅ (0.51) |
+| facebook/dinov3-vitb16-pretrain-lvd1689m | DINOv3ViTModel | random (gated) | 126 | ✅ | ✅ (0.077) |
+| facebook/sam3 | Sam3Model | random (gated) | 4330 | ✅ | ✅ (0.88) |
+
+**6/6 export to an ATen graph and 6/6 pass Embedl transform + INT8 quantize** —
+including **DINOv3** and **SAM3** built from config with random weights (SAM3 is
+text-promptable, so it takes `pixel_values` + `input_ids`).
+
+Notes:
+- **DINOv3** is gated on the Hub (`gated=manual`); building `DINOv3ViTConfig()`
+  directly avoids the download entirely. The random-weight graph is
+  architecturally identical to the real model, which is what `torch.export`
+  traces.
+- **SAM-3D** (`facebook/sam-3d-objects`, `facebook/sam-3d-body-*`) is **not** a
+  transformers model — it ships under custom `sam-3d-objects` / `sam-3d-body`
+  libraries with no transformers config class, so it cannot be built from config
+  (unlike SAM3, which is `Sam3Model` in transformers). Out of scope for this
+  exporter, same as GR00T / SmolVLA / BEV.
+
 ## Bonus: trending top-10 LLMs (ATen export)
 
 Run with `--trending`. On this CPU box the literal top-10 trending models are

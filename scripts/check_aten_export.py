@@ -161,6 +161,29 @@ SPECS: dict[str, dict[str, str]] = {
                  auto="AutoModelForCausalLM", inputs="text"),
     "t5": dict(id="google-t5/t5-small", category="text",
                auto="AutoModelForSeq2SeqLM", inputs="text_seq2seq"),
+    # --- classic image classifiers / backbones (real weights) ---------------
+    "vit": dict(id="google/vit-base-patch16-224", category="vision-backbone",
+                auto="AutoModelForImageClassification", inputs="image"),
+    "resnet": dict(id="microsoft/resnet-50", category="vision-backbone",
+                   auto="AutoModelForImageClassification", inputs="image"),
+    "convnext": dict(id="facebook/convnext-tiny-224",
+                     category="vision-backbone",
+                     auto="AutoModelForImageClassification", inputs="image"),
+    "convnextv2": dict(id="facebook/convnextv2-tiny-1k-224",
+                       category="vision-backbone",
+                       auto="AutoModelForImageClassification", inputs="image"),
+    # --- gated / very-new models: build from config, random weights ---------
+    # (weights="random" -> instantiate the transformers config class directly,
+    #  no Hub download, so gated repos need no auth token.)
+    "dinov3": dict(id="facebook/dinov3-vitb16-pretrain-lvd1689m",
+                   category="vision-backbone", auto="AutoModel",
+                   inputs="image_raw", weights="random",
+                   config_class="DINOv3ViTConfig",
+                   config_kwargs=dict(num_hidden_layers=2, hidden_size=192,
+                                      num_attention_heads=3, image_size=224)),
+    "sam3": dict(id="facebook/sam3", category="vision-segmentation",
+                 auto="AutoModel", inputs="sam3_raw", weights="random",
+                 config_class="Sam3Config"),
 }
 
 
@@ -270,11 +293,16 @@ def _first_tensor(obj: Any) -> torch.Tensor | None:
 
 
 def load_curated_model(spec: dict[str, str]):
-    """Load a curated model (real weights, CPU/float32) and its sample inputs.
+    """Load a curated model (CPU/float32) and its sample inputs.
 
-    Returns ``(model, inputs_dict)``.  Reused by both the ATen-export check and
-    the embedl-deploy transform/quantize check.
+    Real weights by default; ``spec["weights"] == "random"`` instantiates the
+    architecture from its transformers config class with random weights and no
+    Hub download (works for gated / very-new repos without an auth token).
+    Returns ``(model, inputs_dict)``.
     """
+    if spec.get("weights") == "random":
+        return load_random_model(spec)
+
     import transformers
 
     auto_cls = getattr(transformers, spec["auto"])
@@ -291,6 +319,52 @@ def load_curated_model(spec: dict[str, str]):
     inputs = _build_inputs(spec["inputs"], spec["id"])
     inputs = {k: (v.to(torch.float32) if torch.is_floating_point(v) else v)
               for k, v in inputs.items() if isinstance(v, torch.Tensor)}
+    return model, inputs
+
+
+def load_random_model(spec: dict[str, str]):
+    """Build a model from its transformers config class with random weights.
+
+    No Hub download — the config object is constructed directly, so gated /
+    unreleased repos work without an auth token. Inputs are derived from the
+    (possibly nested) config. Returns ``(model, inputs_dict)``.
+    """
+    import transformers
+
+    cfg_cls = getattr(transformers, spec["config_class"])
+    cfg = cfg_cls(**spec.get("config_kwargs", {}))
+    auto_cls = getattr(transformers, spec["auto"])
+    model = None
+    for attn in ("sdpa", "eager"):
+        try:
+            model = auto_cls.from_config(cfg, attn_implementation=attn)
+            break
+        except (ValueError, TypeError):
+            continue
+    if model is None:
+        model = auto_cls.from_config(cfg)
+    model = model.to(torch.float32).eval().to("cpu")
+
+    # Derive an image size from the (possibly nested vision) config.
+    vcfg = getattr(model.config, "vision_config", model.config)
+    size = getattr(vcfg, "image_size", None) or getattr(
+        model.config, "image_size", 224)
+    if isinstance(size, (list, tuple)):
+        size = size[0]
+    chans = getattr(vcfg, "num_channels", 3) or 3
+    torch.manual_seed(0)
+    if spec["inputs"] == "sam3_raw":
+        # SAM3 is a text-promptable concept-segmentation model.
+        tcfg = model.config.get_text_config() if hasattr(
+            model.config, "get_text_config") else getattr(
+            model.config, "text_config", model.config)
+        vocab = getattr(tcfg, "vocab_size", 49408)
+        ids = torch.randint(0, vocab, (1, 8))
+        inputs = {"pixel_values": torch.randn(1, chans, size, size),
+                  "input_ids": ids,
+                  "attention_mask": torch.ones_like(ids)}
+    else:  # image_raw
+        inputs = {"pixel_values": torch.randn(1, chans, size, size)}
     return model, inputs
 
 
